@@ -1,0 +1,20 @@
+homeassistant: false
+permit_join: true
+mqtt:
+  base_topic: zigbee2mqtt
+  server: mqtt://mosquitto
+serial:
+  port: /dev/ttyUSB0
+  adapter: ezsp
+advanced:
+  log_level: info
+  transmit_power: 20
+frontend:
+  enabled: true
+  port: 8080
+# Nach dem Pairing IEEE-Adresse des BILRESA hier eintragen:
+# devices:
+#   '0xXXXXXXXXXXXXXXXX':
+#     simulated_brightness:
+#       delta: 20
+#       interval: 200

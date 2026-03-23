@@ -1,0 +1,21 @@
+mqtt:
+  broker: "tcp://localhost:1883"
+  client_id: "zigbee-controller"
+  username: ""
+  password: ""
+
+homekit:
+  pin: "11122333"
+  name: "Zigbee Bridge"
+  storage_path: "./hap-data"
+
+devices:
+  bulbs:
+    - friendly_name: "kajplats_1"
+      display_name: "Wohnzimmer Lampe"
+    - friendly_name: "kajplats_2"
+      display_name: "Schlafzimmer Lampe"
+  remotes:
+    - friendly_name: "bilresa_1"
+      display_name: "BILRESA Scrollrad"
+      controls_bulbs: ["kajplats_1", "kajplats_2"]
