@@ -33,3 +33,11 @@ go.work.sum
 
 # Git worktrees
 .worktrees/
+
+# Project-specific
+hap-data/
+bin/
+config.yaml
+zigbee2mqtt/database.db
+zigbee2mqtt/coordinator_backup.json
+zigbee2mqtt/devices.yaml
