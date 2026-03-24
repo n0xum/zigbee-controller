@@ -1,4 +1,4 @@
-.PHONY: build run docker-up docker-logs tidy
+.PHONY: build run docker-up docker-logs tidy test lint
 
 build:
 	go build -o bin/bridge ./cmd/bridge
@@ -14,3 +14,9 @@ docker-logs:
 
 tidy:
 	go mod tidy
+
+test:
+	go test ./...
+
+lint:
+	go vet ./...
