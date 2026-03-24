@@ -5,6 +5,7 @@ services:
       - "1883:1883"
     volumes:
       - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+    restart: unless-stopped
 
   zigbee2mqtt:
     image: koenkk/zigbee2mqtt:latest
@@ -18,3 +19,13 @@ services:
     environment:
       - TZ=Europe/Berlin
     restart: unless-stopped
+
+  bridge:
+    image: ghcr.io/n0xum/zigbee-controller:latest
+    restart: unless-stopped
+    depends_on:
+      - mosquitto
+    network_mode: host
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      - ./hap-data:/app/hap-data
