@@ -23,7 +23,7 @@ services:
     restart: unless-stopped
 
   bridge:
-    image: ghcr.io/n0xum/zigbee-controller:latest
+    build: .
     restart: unless-stopped
     depends_on:
       - mosquitto
