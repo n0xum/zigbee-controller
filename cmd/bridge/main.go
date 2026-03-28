@@ -112,6 +112,7 @@ func main() {
 			FriendlyName: rcfg.FriendlyName,
 			DisplayName:  rcfg.DisplayName,
 			OnBrightnessLevel: func(level int) {
+				log.Info("Helligkeit setzen", "level", level)
 				for _, b := range linkedBulbs {
 					payload := []byte(`{"brightness":` + fmt.Sprintf("%d", level) + `}`)
 					_ = client.Publish("zigbee2mqtt/"+b.FriendlyName+"/set", payload)
