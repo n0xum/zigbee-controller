@@ -25,7 +25,7 @@ var ignorierteActions = map[RemoteAction]bool{
 // remotePayload ist das eingehende JSON-Format vom BILRESA-Scrollrad.
 type remotePayload struct {
 	Action      string `json:"action"`
-	ActionLevel int    `json:"action_level"`
+	ActionLevel *int   `json:"action_level"`
 }
 
 // RemoteDevice repräsentiert ein BILRESA-Scrollrad.
@@ -62,8 +62,8 @@ func (r *RemoteDevice) HandleMessage(payload []byte) {
 	}
 
 	if action == ActionBrightnessMoveToLevel {
-		if r.OnBrightnessLevel != nil {
-			r.OnBrightnessLevel(p.ActionLevel)
+		if p.ActionLevel != nil && r.OnBrightnessLevel != nil {
+			r.OnBrightnessLevel(*p.ActionLevel)
 		}
 		return
 	}
