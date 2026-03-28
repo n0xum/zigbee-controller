@@ -112,6 +112,13 @@ func main() {
 			FriendlyName: rcfg.FriendlyName,
 			DisplayName:  rcfg.DisplayName,
 			OnBrightnessLevel: func(level int) {
+				// Helligkeit auf [3, 250] begrenzen (≈1–98%), damit die Lampen
+				// beim Erreichen des Scrollrad-Endes nicht ausgehen.
+				if level < 3 {
+					level = 3
+				} else if level > 250 {
+					level = 250
+				}
 				log.Info("Helligkeit setzen", "level", level)
 				for _, b := range linkedBulbs {
 					payload := []byte(`{"brightness":` + fmt.Sprintf("%d", level) + `}`)
