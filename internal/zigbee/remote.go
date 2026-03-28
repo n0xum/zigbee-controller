@@ -9,11 +9,12 @@ import (
 type RemoteAction string
 
 const (
-	ActionOn                 RemoteAction = "on"
-	ActionOff                RemoteAction = "off"
-	ActionBrightnessMoveUp   RemoteAction = "brightness_move_up"
-	ActionBrightnessMoveDown RemoteAction = "brightness_move_down"
-	ActionBrightnessStop     RemoteAction = "brightness_stop"
+	ActionOn                   RemoteAction = "on"
+	ActionOff                  RemoteAction = "off"
+	ActionBrightnessMoveUp     RemoteAction = "brightness_move_up"
+	ActionBrightnessMoveDown   RemoteAction = "brightness_move_down"
+	ActionBrightnessStop       RemoteAction = "brightness_stop"
+	ActionBrightnessMoveToLevel RemoteAction = "brightness_move_to_level"
 )
 
 // ignorierteActions werden nicht weitergeleitet.
@@ -23,7 +24,8 @@ var ignorierteActions = map[RemoteAction]bool{
 
 // remotePayload ist das eingehende JSON-Format vom BILRESA-Scrollrad.
 type remotePayload struct {
-	Action string `json:"action"`
+	Action      string `json:"action"`
+	ActionLevel int    `json:"action_level"`
 }
 
 // RemoteDevice repräsentiert ein BILRESA-Scrollrad.
@@ -33,7 +35,9 @@ type RemoteDevice struct {
 
 	// OnAction wird bei jeder relevanten Aktion aufgerufen.
 	OnAction func(action RemoteAction)
-	log      *slog.Logger
+	// OnBrightnessLevel wird bei brightness_move_to_level mit dem absoluten Helligkeitswert aufgerufen.
+	OnBrightnessLevel func(level int)
+	log               *slog.Logger
 }
 
 // Name implementiert das Device-Interface.
@@ -54,6 +58,13 @@ func (r *RemoteDevice) HandleMessage(payload []byte) {
 
 	action := RemoteAction(p.Action)
 	if action == "" || ignorierteActions[action] {
+		return
+	}
+
+	if action == ActionBrightnessMoveToLevel {
+		if r.OnBrightnessLevel != nil {
+			r.OnBrightnessLevel(p.ActionLevel)
+		}
 		return
 	}
 

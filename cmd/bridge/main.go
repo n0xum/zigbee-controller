@@ -3,6 +3,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -110,6 +111,12 @@ func main() {
 		remote := &zigbee.RemoteDevice{
 			FriendlyName: rcfg.FriendlyName,
 			DisplayName:  rcfg.DisplayName,
+			OnBrightnessLevel: func(level int) {
+				for _, b := range linkedBulbs {
+					payload := []byte(`{"brightness":` + fmt.Sprintf("%d", level) + `}`)
+					_ = client.Publish("zigbee2mqtt/"+b.FriendlyName+"/set", payload)
+				}
+			},
 			OnAction: func(action zigbee.RemoteAction) {
 				switch action {
 				case zigbee.ActionOn:
