@@ -108,6 +108,30 @@ func (b *BulbDevice) BrightnessOnlyCommand() []byte {
 	return data
 }
 
+// BrightnessMoveCommand erzeugt einen Befehl, mit dem die Lampe ihre Helligkeit
+// selbstständig verändert. rate ist die Änderung in Einheiten pro Sekunde,
+// negativ bedeutet abwärts; 0 hält an.
+//
+// Der Zweck ist, beim Dimmen nicht laufend Einzelbefehle zu schicken: zwei
+// Kommandos pro Geste statt fünf pro Sekunde. Das Zigbee-Netz ist schmalbandig,
+// und billige Lampen hängen sich unter solchen Salven auf — am 2026-08-04 ist
+// genau so eine KAJPLATS ausgestiegen.
+//
+// Bewusst "brightness_move" und nicht "brightness_move_onoff": die Variante
+// ohne _onoff hält an der Mindesthelligkeit an, statt die Lampe auszuschalten,
+// und weckt keine ausgeschaltete Lampe auf.
+func BrightnessMoveCommand(rate int) []byte {
+	data, _ := json.Marshal(map[string]int{"brightness_move": rate})
+	return data
+}
+
+// BrightnessValueCommand setzt die Helligkeit auf einen festen Wert, ohne den
+// Schaltzustand oder die Farbtemperatur anzufassen.
+func BrightnessValueCommand(value int) []byte {
+	data, _ := json.Marshal(map[string]int{"brightness": value})
+	return data
+}
+
 // GetState gibt den aktuellen Zustand thread-safe zurück.
 func (b *BulbDevice) GetState() (on bool, brightness, colorTemp int) {
 	b.mu.RLock()

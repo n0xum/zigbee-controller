@@ -106,7 +106,10 @@ func main() {
 			}
 		}
 
-		dimmer := automation.NewDimmer(linkedBulbs, client.Publish, 20)
+		// 100 Einheiten pro Sekunde -- entspricht der bisherigen Geschwindigkeit
+		// (20 Einheiten alle 200 ms), wird jetzt aber von der Lampe selbst
+		// interpoliert statt in Einzelschritten gefunkt.
+		dimmer := automation.NewDimmer(linkedBulbs, client.Publish, 100)
 
 		remote := &zigbee.RemoteDevice{
 			FriendlyName: rcfg.FriendlyName,
