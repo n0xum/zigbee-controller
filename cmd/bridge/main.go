@@ -162,6 +162,7 @@ func main() {
 		PIN:         cfg.HomeKit.PIN,
 		Name:        cfg.HomeKit.Name,
 		StoragePath: cfg.HomeKit.StoragePath,
+		Interfaces:  cfg.HomeKit.Interfaces,
 	}
 	bridge, err := homekit.NewBridge(hkCfg, accessories, log)
 	if err != nil {

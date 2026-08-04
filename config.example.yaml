@@ -8,6 +8,15 @@ homekit:
   pin: "11122333"
   name: "Zigbee Bridge"
   storage_path: "./hap-data"
+  # Auf welchen Netzwerkschnittstellen die Bridge per mDNS angekuendigt wird.
+  # Weglassen oder leer lassen = alle (Standardverhalten von dnssd).
+  #
+  # Im Docker-host-Netzmodus unbedingt setzen: der Container sieht sonst auch
+  # alle Docker-Bridges und das Loopback und kuendigt die Bridge dort mit
+  # 172.x- bzw. 127.0.0.1-Adressen an, die vom LAN aus unerreichbar sind.
+  # iOS probiert die Adressen durch und bricht bei den falschen ab -- die
+  # Bridge erscheint dann sporadisch als "keine Antwort".
+  interfaces: ["eth0"]
 
 devices:
   bulbs:

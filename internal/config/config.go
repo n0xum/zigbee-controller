@@ -20,6 +20,16 @@ type HomeKitConfig struct {
 	PIN         string `mapstructure:"pin"`
 	Name        string `mapstructure:"name"`
 	StoragePath string `mapstructure:"storage_path"`
+
+	// Interfaces beschränkt die mDNS-Ankündigung auf die genannten
+	// Netzwerkschnittstellen (z. B. ["eth0"]). Leer bedeutet: alle.
+	//
+	// Läuft der Container im host-Netzmodus, sieht er auch sämtliche
+	// Docker-Bridges und kündigt die Bridge dort mit 172.x-Adressen an, die
+	// vom LAN aus unerreichbar sind. iOS probiert die Adressen durch und
+	// bricht bei den falschen ab — die Bridge erscheint dann sporadisch als
+	// "keine Antwort". Deshalb hier auf die LAN-Schnittstelle einschränken.
+	Interfaces []string `mapstructure:"interfaces"`
 }
 
 // BulbConfig beschreibt eine einzelne Lampe.
